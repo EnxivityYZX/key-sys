@@ -1,21 +1,23 @@
 export const LINKVERTISE_URL = 'https://link-center.net/1401533/EfTevELAULeU';
 
 // Linkvertise button
-if (document.getElementById('linkvertiseDirect')) {
-    document.getElementById('linkvertiseDirect').addEventListener('click', () => {
-        localStorage.setItem('linkvertiseDone', 'true'); // mark as clicked
-        window.open(LINKVERTISE_URL, '_blank', 'noopener'); // open in new tab
+const linkBtn = document.getElementById('linkvertiseDirect');
+if (linkBtn) {
+    linkBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent any default navigation
+        localStorage.setItem('linkvertiseDone', 'true'); // mark Linkvertise clicked
+        window.open(LINKVERTISE_URL, '_blank', 'noopener'); // open Linkvertise in new tab
         alert('Linkvertise opened! Complete it there before getting the key.');
     });
 }
 
 // Get Key button
-if (document.getElementById('getKeyBtn')) {
-    const btn = document.getElementById('getKeyBtn');
-    const nameEl = document.getElementById('nameInput');
-    const keyDisplay = document.getElementById('generatedKey');
+const keyBtn = document.getElementById('getKeyBtn');
+const nameEl = document.getElementById('nameInput');
+const keyDisplay = document.getElementById('generatedKey');
 
-    btn.addEventListener('click', () => {
+if (keyBtn) {
+    keyBtn.addEventListener('click', () => {
         if (localStorage.getItem('linkvertiseDone') !== 'true') {
             alert('You must click the Linkvertise button first!');
             return;
@@ -25,7 +27,10 @@ if (document.getElementById('getKeyBtn')) {
         const fixedKey = 'G81KP1V22H';
         const displayKey = name ? `${name}-${fixedKey}` : fixedKey;
 
-        if (keyDisplay) keyDisplay.textContent = displayKey; // show key on same page
+        if (keyDisplay) keyDisplay.textContent = displayKey;
+
+        // DO NOT redirect to any /key page
+        // The key is revealed on the same page only
     });
 }
 
