@@ -25,7 +25,7 @@ export async function redeemKey(key) {
   return res.json();
 }
 
-export const LINKVERTISE_URL = 'https://link-center.net/1401533/EfTevELAULeU';
+export const LINKVERTISE_URL = 'https://68d718bef81d730008545254--astounding-pudding-e5287b.netlify.app/key';
 
 // Home page wiring
 if (document.getElementById('getKeyBtn')) {
