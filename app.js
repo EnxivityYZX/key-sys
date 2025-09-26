@@ -1,19 +1,12 @@
 export const LINKVERTISE_URL = 'https://link-center.net/1401533/EfTevELAULeU';
 
-window.addEventListener('load', () => {
-    localStorage.removeItem('linkvertiseDone'); // reset flag on page load
-});
-
 // Linkvertise button
 if (document.getElementById('linkvertiseDirect')) {
     document.getElementById('linkvertiseDirect').addEventListener('click', () => {
         localStorage.setItem('linkvertiseDone', 'true'); // mark as clicked
         window.open(LINKVERTISE_URL, '_blank', 'noopener'); // open in new tab
-        alert('Linkvertise opened! Complete it there before getting the key.'); 
+        alert('Linkvertise opened! Complete it there before getting the key.');
     });
-
-    const back = document.getElementById('backHome');
-    if (back) back.addEventListener('click', (e) => { e.preventDefault(); history.length > 1 && history.back(); });
 }
 
 // Get Key button
@@ -32,13 +25,14 @@ if (document.getElementById('getKeyBtn')) {
         const fixedKey = 'G81KP1V22H';
         const displayKey = name ? `${name}-${fixedKey}` : fixedKey;
 
-        if (keyDisplay) keyDisplay.textContent = displayKey;
-        // Now the user sees the key on the same page, no redirect
+        if (keyDisplay) keyDisplay.textContent = displayKey; // show key on same page
     });
-
-    const back = document.getElementById('backHome');
-    if (back) back.addEventListener('click', (e) => { e.preventDefault(); history.length > 1 && history.back(); });
 }
+
+// Optional: Back buttons
+document.querySelectorAll('#backHome').forEach(back => {
+    back.addEventListener('click', e => { e.preventDefault(); history.length > 1 && history.back(); });
+});
 
 // Background dots animation
 (function dots() {
