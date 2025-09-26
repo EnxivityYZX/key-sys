@@ -1,8 +1,14 @@
 export async function ensureSW() {
   if ('serviceWorker' in navigator) {
-    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-    await navigator.serviceWorker.ready;
-    return reg;
+    try {
+      // use relative path to ensure same-origin SW fetch and catch failures
+      const reg = await navigator.serviceWorker.register('./sw.js', { scope: '/' });
+      await navigator.serviceWorker.ready;
+      return reg;
+    } catch (err) {
+      console.error('Service worker registration failed:', err);
+      return null;
+    }
   }
   throw new Error('Service worker not supported');
 }
@@ -18,6 +24,8 @@ export async function redeemKey(key) {
   const res = await fetch(`/api/redeem?key=${encodeURIComponent(key)}`);
   return res.json();
 }
+
+export const LINKVERTISE_URL = 'https://link-center.net/1401533/EfTevELAULeU';
 
 // Home page wiring
 if (document.getElementById('getKeyBtn')) {
@@ -46,11 +54,9 @@ if (document.getElementById('linkvertiseDirect')) {
   (async () => {
     await ensureSW();
     document.getElementById('linkvertiseDirect').addEventListener('click', async () => {
-      const res = await startSession('linkvertise');
-      if (res?.session) {
-        // immediately complete and redirect to key page (keeps same GUI flow)
-        location.href = `/api/return?session=${encodeURIComponent(res.session)}`;
-      }
+      // Open the configured LINKVERTISE_URL in a new tab/window.
+      // Edit LINKVERTISE_URL above to change where this button goes.
+      window.open(LINKVERTISE_URL, '_blank', 'noopener');
     });
     const back = document.getElementById('backHome');
     back.addEventListener('click', (e) => { e.preventDefault(); history.length > 1 && history.back(); });
