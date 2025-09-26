@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generate Key</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg">
+  <canvas id="dots"></canvas>
+  <main class="center">
+    <section class="modal">
+      <h1 class="title glow">KEY SYSTEM</h1>
+      <div class="key-box">
+        <span id="keyText" class="key-text">──────────</span>
+      </div>
+      <button id="generateBtn" class="btn btn-outline">Generate Key</button>
+      <button id="copyBtn" class="btn btn-outline" style="display:none;">Copy Key</button>
+      <p class="meta">Key valid for 24h.</p>
+
+      <!-- Popup -->
+      <div id="popupOverlay" class="popup-overlay" aria-hidden="true">
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+          <div id="popupTitle">Key Generated</div>
+          <button id="popupOk">Okay</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+  <script>
+    function genKey(len = 10) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const arr = new Uint32Array(len);
+      crypto.getRandomValues(arr);
+      let out = '';
+      for (let i=0;i<len;i++) out += chars[arr[i] % chars.length];
+      return out;
+    }
+
+    const keyText = document.getElementById('keyText');
+    const genBtn = document.getElementById('generateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    genBtn.addEventListener('click', () => {
+      // prevent multiple generation
+      if (genBtn.disabled) return;
+      const key = genKey(10);
+      keyText.textContent = key.split('').join(' ');
+      copyBtn.style.display = 'block';
+      genBtn.disabled = true;
+      genBtn.textContent = 'Generated';
+      // store in session for possible later use
+      sessionStorage.setItem('generated_key', key);
+
+      // show popup
+      const overlay = document.getElementById('popupOverlay');
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden', 'false');
+    });
+
+    // popup ok handler
+    document.getElementById('popupOk').addEventListener('click', () => {
+      const overlay = document.getElementById('popupOverlay');
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden', 'true');
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const key = sessionStorage.getItem('generated_key') || '';
+      try {
+        await navigator.clipboard.writeText(key);
+        const prev = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = prev, 1200);
+      } catch {
+        alert('Copy failed');
+      }
+    });
+
+    // reuse dots canvas animation if app.js already running: no-op here
+  </script>
+</body>
+</html>

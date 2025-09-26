@@ -1,0 +1,18 @@
+How it works:
+- Open index.html. Click "Get Key" to go to the key system.
+- Choose Linkvertise or Lootlabs. This calls /api/start (Service Worker) and sends you to a simulated provider page.
+- Click "Complete and return" to hit /api/return. The Service Worker generates a unique 10-char key, valid for 24h, and redirects you to /key.html?key=XXXX...
+- On the key page, copy the key and note it expires in 24 hours. /api/redeem can be used to validate a key.
+
+Endpoints (implemented in sw.js):
+- POST /api/start?source=linkvertise|lootlabs[&name=optional]
+  -> {session, redirect}
+- GET /api/return?session=...
+  -> 302 redirect to /key.html?key=...
+- GET /api/redeem?key=...
+  -> {valid:boolean, key_text, created_at, expires_at, source?}
+
+Note:
+- The backend is simulated entirely in the Service Worker with IndexedDB persistence.
+- Background image uses Unsplash and can be replaced at will.
+

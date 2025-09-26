@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Key System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg">
+  <canvas id="dots"></canvas>
+  <main class="center">
+    <section class="modal">
+      <h1 class="title glow">key system</h1>
+      <p class="subtitle">Linkvertise, Lootlabs</p>
+      <p class="hint">If one of those buttons doesn't work, use another one!</p>
+      <div class="row">
+        <button class="btn btn-outline" id="linkvertiseBtn">Linkvertise</button>
+        <button class="btn btn-outline" id="lootlabsBtn">Lootlabs</button>
+      </div>
+      <a class="back" href="index.html" aria-label="Back">Back</a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { ensureSW, startSession } from './app.js';
+    await ensureSW();
+
+    const start = async (source) => {
+      const res = await startSession(source);
+      if (res?.redirect) {
+        location.href = res.redirect;
+      } else {
+        alert('Failed to start session. Please try again.');
+      }
+    };
+
+    document.getElementById('linkvertiseBtn').addEventListener('click', () => start('linkvertise'));
+    document.getElementById('lootlabsBtn').addEventListener('click', () => start('lootlabs'));
+  </script>
+</body>
+</html>

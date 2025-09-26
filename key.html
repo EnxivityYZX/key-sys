@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Key</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg">
+  <canvas id="dots"></canvas>
+  <main class="center">
+    <section class="modal">
+      <h1 class="title glow">Key System</h1>
+      <div class="key-box">
+        <span id="keyText" class="key-text">──────────</span>
+      </div>
+      <button id="copyBtn" class="btn btn-outline">Copy Key</button>
+      <p class="meta">Expires in 24h.</p>
+      <a class="back" href="key-system.html" aria-label="Back">Back</a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { ensureSW, redeemKey } from './app.js';
+    await ensureSW();
+
+    const params = new URLSearchParams(location.search);
+    const key = params.get('key');
+    const keyText = document.getElementById('keyText');
+
+    if (!key) {
+      keyText.textContent = 'INVALID KEY';
+    } else {
+      keyText.textContent = key.split('').join(' ');
+      // Validate key (optional UX)
+      redeemKey(key).catch(()=>{});
+    }
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(key || '');
+        const btn = document.getElementById('copyBtn');
+        const prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => (btn.textContent = prev), 1200);
+      } catch (_) {
+        alert('Copy failed');
+      }
+    });
+  </script>
+</body>
+</html>
