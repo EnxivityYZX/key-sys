@@ -4,16 +4,19 @@ window.addEventListener('load', () => {
     localStorage.removeItem('linkvertiseDone'); // reset flag on page load
 });
 
+// Linkvertise button
 if (document.getElementById('linkvertiseDirect')) {
     document.getElementById('linkvertiseDirect').addEventListener('click', () => {
-        localStorage.setItem('linkvertiseDone', 'true'); // set flag
-        window.open(LINKVERTISE_URL, '_blank', 'noopener');
+        localStorage.setItem('linkvertiseDone', 'true'); // mark as clicked
+        window.open(LINKVERTISE_URL, '_blank', 'noopener'); // open in new tab
+        alert('Linkvertise opened! Complete it there before getting the key.'); 
     });
 
     const back = document.getElementById('backHome');
     if (back) back.addEventListener('click', (e) => { e.preventDefault(); history.length > 1 && history.back(); });
 }
 
+// Get Key button
 if (document.getElementById('getKeyBtn')) {
     const btn = document.getElementById('getKeyBtn');
     const nameEl = document.getElementById('nameInput');
@@ -21,7 +24,7 @@ if (document.getElementById('getKeyBtn')) {
 
     btn.addEventListener('click', () => {
         if (localStorage.getItem('linkvertiseDone') !== 'true') {
-            alert('You must complete Linkvertise first!');
+            alert('You must click the Linkvertise button first!');
             return;
         }
 
@@ -30,14 +33,14 @@ if (document.getElementById('getKeyBtn')) {
         const displayKey = name ? `${name}-${fixedKey}` : fixedKey;
 
         if (keyDisplay) keyDisplay.textContent = displayKey;
-
-        location.href = location.origin + '/key'; // redirect to your second page
+        // Now the user sees the key on the same page, no redirect
     });
 
     const back = document.getElementById('backHome');
     if (back) back.addEventListener('click', (e) => { e.preventDefault(); history.length > 1 && history.back(); });
 }
 
+// Background dots animation
 (function dots() {
     const c = document.getElementById('dots');
     if (!c) return;
